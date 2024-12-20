@@ -1,4 +1,5 @@
-# Import necessary modules from Scikit-Learn
+# Import necessary modules
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 
@@ -9,18 +10,29 @@ y = churn_df["churn"].to_numpy()
 # Split the data into training and test sets with stratification
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
-# Initialize the KNN classifier with 5 neighbors
+# Create a range of neighbors to evaluate
+neighbors = np.arange(1, 13)
+train_accuracies = {}
+test_accuracies = {}
+
+# Evaluate the KNN classifier for each number of neighbors
+for neighbor in neighbors:
+    knn = KNeighborsClassifier(n_neighbors=neighbor)  # Set up a KNN classifier
+    knn.fit(X_train, y_train)  # Train the model
+    train_accuracies[neighbor] = knn.score(X_train, y_train)  # Training accuracy
+    test_accuracies[neighbor] = knn.score(X_test, y_test)  # Test accuracy
+
+# Display the range of neighbors and corresponding accuracies
+print(f"Neighbors: {neighbors}")
+print(f"Training Accuracies: {train_accuracies}")
+print(f"Test Accuracies: {test_accuracies}")
+
+# Evaluate the model with 5 neighbors as a baseline
 knn = KNeighborsClassifier(n_neighbors=5)
-
-# Train the KNN model on the training data
 knn.fit(X_train, y_train)
-
-# Evaluate the model's accuracy on the test set and print the score
 accuracy = knn.score(X_test, y_test)
-print(f"Model accuracy: {accuracy:.2f}")
+print(f"Baseline Model Accuracy with 5 Neighbors: {accuracy:.2f}")
 
 # Example: Predict churn for new data points
 y_pred = knn.predict(X_test[:5])  # Predict on the first 5 test samples
-
-# Display the predicted labels
 print(f"Predictions for the first 5 test samples: {y_pred}")
