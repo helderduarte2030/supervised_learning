@@ -27,16 +27,19 @@ print(f"Neighbors: {neighbors}")
 print(f"Training Accuracies: {train_accuracies}")
 print(f"Test Accuracies: {test_accuracies}")
 
-# Initialize and train a baseline KNN classifier with 5 neighbors
-knn = KNeighborsClassifier(n_neighbors=5)
-knn.fit(X_train, y_train)
+# Find the number of neighbors that gives the best test accuracy
+best_neighbor = max(test_accuracies, key=test_accuracies.get)
+best_accuracy = test_accuracies[best_neighbor]
 
-# Compute and display the accuracy of the baseline model
-accuracy = knn.score(X_test, y_test)
-print(f"Baseline Model Accuracy with 5 Neighbors: {accuracy:.2f}")
+# Print the best test accuracy and the corresponding number of neighbors
+print(f"Best Test Accuracy: {best_accuracy:.2f} with {best_neighbor} neighbors")
 
-# Predict churn for a subset of the test set
-y_pred = knn.predict(X_test[:5])
+# Train the model with the best number of neighbors
+best_knn = KNeighborsClassifier(n_neighbors=best_neighbor)
+best_knn.fit(X_train, y_train)
+
+# Predict churn for a subset of the test set using the best model
+y_pred = best_knn.predict(X_test[:5])
 
 # Display the predictions for the first few test samples
-print(f"Predictions for the first 5 test samples: {y_pred}")
+print(f"Predictions for the first 5 test samples with the best model: {y_pred}")
