@@ -2,8 +2,8 @@
 from sklearn.neighbors import KNeighborsClassifier
 
 # Convert the feature matrix (X) and target variable (y) into NumPy arrays
-X = churn_df[["account_length", "customer_service_calls"]].to_numpy()  # Features: account length & customer service calls
-y = churn_df["churn"].to_numpy()  # Target: churn status
+X = churn_df[["account_length", "customer_service_calls"]].to_numpy()
+y = churn_df["churn"].to_numpy()
 
 # Initialize the KNN classifier with 6 neighbors
 knn = KNeighborsClassifier(n_neighbors=6)
